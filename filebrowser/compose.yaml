@@ -1,0 +1,14 @@
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:s6
+    container_name: filebrowser
+    env_file:
+      - .env
+    volumes:
+      - ${SOURCE}:/srv # files that are being shared
+      - ./database:/database
+      - ./config:/config
+    ports:
+      - 127.0.0.1:8080:80
+    restart: unless-stopped
+networks: {}

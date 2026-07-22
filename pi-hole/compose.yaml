@@ -1,0 +1,35 @@
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Kolkata
+      FTLCONF_webserver_api_password: ${PASSWORD}
+      FTLCONF_dns_listeningMode: ALL
+    volumes:
+      - ./config:/etc/pihole
+    ports:
+      - 127.0.0.1:8008:80/tcp
+    cap_add:
+      - SYS_NICE
+
+  tailscale-pihole:
+    image: tailscale/tailscale:latest
+    container_name: tailscale-pihole
+    restart: unless-stopped
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      TS_AUTHKEY: ${TS_AUTH_KEY}
+      TS_HOSTNAME: pihole
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_USERSPACE: "false"
+      TS_ACCEPT_DNS: "false"
+    volumes:
+      - ./tailscale_state:/var/lib/tailscale
+    network_mode: service:pihole
+    depends_on:
+      - pihole
+    cap_add:
+      - NET_ADMIN

@@ -1,0 +1,17 @@
+services:
+  homarr:
+    container_name: homarr
+    image: ghcr.io/homarr-labs/homarr:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./homarr/appdata:/appdata
+    ports:
+      - 127.0.0.1:7575:7575
+    deploy:
+      resources:
+        limits:
+          memory: 750MB
+networks: {}

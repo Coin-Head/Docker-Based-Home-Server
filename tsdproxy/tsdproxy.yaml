@@ -1,0 +1,35 @@
+docker:
+    local:
+        host: unix:///var/run/docker.sock
+        targetHostname: host.docker.internal
+        tryDockerInternalNetwork: true
+        autoRestart: true
+        healthCheckEnabled: true
+        healthCheckInterval: 30
+        healthCheckFailures: 3
+        healthCheckCooldown: 0
+lists: {}
+tailscale:
+    providers:
+        default:
+            # Generate auth key by going to:
+            # Admin Console > Settings > Keys > generate auth Key
+            authKey: "<tailscale auth key>"
+            controlUrl: https://controlplane.tailscale.com
+            preventDuplicates: false
+            maxCertConcurrency: 2
+    dataDir: /data/
+defaultProxyProvider: default
+telemetry:
+    endpoint: localhost:4317
+    enabled: false
+    insecure: false
+webhooks: []
+log:
+    level: info
+    json: false
+http:
+    hostname: 0.0.0.0
+    port: 8080
+proxyAccessLog: true
+adminAllowLocalhost: true

@@ -1,0 +1,19 @@
+services:
+  dockge:
+    image: louislam/dockge:latest
+    container_name: dockge
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/app/data
+      # Both paths must match
+      # - /my-stacks:/my-stacks
+      # I would recommend setting the path to the root folder of this project
+      - ${STACKS_PATH}:${STACKS_PATH}
+    env_file:
+      - .env
+    environment:
+      DOCKGE_STACKS_DIR: ${STACKS_PATH}
+    ports:
+      - 127.0.0.1:5001:5001
+    restart: unless-stopped
+networks: {}

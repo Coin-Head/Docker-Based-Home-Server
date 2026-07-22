@@ -1,0 +1,16 @@
+services:
+  ariang:
+    image: hurlenko/aria2-ariang
+    container_name: aria2
+    ports:
+      - 127.0.0.1:8081:8080
+      - 6881:6881
+      - 6881:6881/udp
+    volumes:
+      # make sure to specify download directory in the .env file
+      - ${DOWNLOAD_DIR}:/aria2/data
+      - ./config:/aria2/conf
+    env_file:
+      - .env
+    restart: unless-stopped
+networks: {}

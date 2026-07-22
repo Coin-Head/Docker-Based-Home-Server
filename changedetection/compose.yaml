@@ -1,0 +1,41 @@
+services:
+  changedetection:
+    image: lscr.io/linuxserver/changedetection.io:latest
+    container_name: changedetection
+    hostname: changedetection
+    volumes:
+      - changedetection-data:/datastore
+    environment:
+      # - LOGGER_LEVEL=TRACE
+      - PLAYWRIGHT_DRIVER_URL=${BROWSER_URL}
+      - BASE_URL=${BASE_URL}
+      - FETCH_WORKERS=2
+      - TZ=Asia/Kolkata
+    ports:
+      - 127.0.0.1:5000:5000
+    restart: unless-stopped
+    networks:
+      - internal
+      # Uses ntfy for notification, changedetection is connected to ntfy's default network
+      - ntfy_default
+    depends_on:
+      browser-sockpuppet-chrome:
+        condition: service_started
+  browser-sockpuppet-chrome:
+    hostname: browser-sockpuppet-chrome
+    image: dgtlmoon/sockpuppetbrowser
+    restart: unless-stopped
+    environment:
+      - MAX_CONCURRENT_CHROME_PROCESSES=2
+    cap_add:
+      - SYS_ADMIN
+    ports:
+      - 127.0.0.1:3000:3000
+    networks:
+      - internal
+volumes:
+  changedetection-data: null
+networks:
+  internal: {}
+  ntfy_default:
+    external: true

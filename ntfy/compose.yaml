@@ -1,0 +1,16 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy:latest
+    container_name: ntfy
+    command:
+      - serve
+    env_file:
+      - .env
+    volumes:
+      - ./cache:/var/cache/ntfy
+      - ./config:/etc/ntfy
+      - ./data:/var/lib/ntfy
+    ports:
+      - 127.0.0.1:2586:80
+    restart: unless-stopped
+networks: {}

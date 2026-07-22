@@ -1,0 +1,18 @@
+services:
+  tsdproxy:
+    image: almeidapaulopt/tsdproxy:2
+    container_name: tsdproxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - datadir:/data
+      - ./config:/config
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:8088:8080
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: tsdproxy-dashboard
+      tsdproxy.dash.visible: "false"
+volumes:
+  datadir: null
+networks: {}

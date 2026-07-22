@@ -1,0 +1,10 @@
+services:
+  stirling-pdf:
+    image: stirlingtools/stirling-pdf:latest-fat
+    container_name: stirling-pdf
+    volumes:
+      - ./config:/config
+    ports:
+      - 127.0.0.1:8070:8080
+    restart: unless-stopped
+networks: {}

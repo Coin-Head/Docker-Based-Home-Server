@@ -1,0 +1,14 @@
+services:
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    env_file:
+      - .env
+    volumes:
+      - ./config:/config
+      - ./backups:/backups
+      - ${SOURCE}:/source:ro
+    ports:
+      - 127.0.0.1:8200:8200
+    restart: unless-stopped
+networks: {}

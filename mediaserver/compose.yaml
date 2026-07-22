@@ -1,0 +1,196 @@
+x-environment: &a1
+  PUID: ${PUID}
+  PGID: ${PGID}
+  TZ: ${TZ}
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    # Optional (expose jellyfin as a node in the tailnet)
+    # refer: https://almeidapaulopt.github.io/tsdproxy/docs/providers/docker-reference/
+    # labels:
+    #  tsdproxy.enable: "true"
+    #  tsdproxy.name: jellyfin
+    #  tsdproxy.port.1: 443/https:8096/http
+    # =================================================
+    environment:
+      <<: *a1
+      DOCKER_MODS: linuxserver/mods:universal-package-install
+      INSTALL_PACKAGES: intel-opencl-icd
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ./config/jellyfin:/config
+      - ${LIBRARY}:/data
+    ports:
+      - 127.0.0.1:8096:8096
+    networks:
+      - internal_net
+      - tsdproxy_default
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -i
+        - http://localhost:8096/health
+      start_period: 60s
+      timeout: 3s
+      interval: 30s
+      retries: 3
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
+    restart: unless-stopped
+    # Optional (expose seer as a node in the tailnet)
+    # refer: https://almeidapaulopt.github.io/tsdproxy/docs/providers/docker-reference/
+    # labels:
+    #  tsdproxy.enable: "true"
+    #  tsdproxy.name: seerr
+    #  tsdproxy.port.1: 443/https:5055/http
+    # ==============================================
+    environment:
+      <<: *a1
+      LOG_LEVEL: debug
+    volumes:
+      - ./config/seerr:/app/config
+    ports:
+      - 127.0.0.1:5055:5055
+    networks:
+      - internal_net
+      - tsdproxy_default
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider
+        http://localhost:5055/api/v1/settings/public || exit 1
+      start_period: 30s
+      timeout: 3s
+      interval: 15s
+      retries: 3
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      <<: *a1
+    volumes:
+      - ./config/radarr:/config
+      - ${LIBRARY}:/data
+    ports:
+      - 127.0.0.1:7878:7878
+    networks:
+      - internal_net
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      <<: *a1
+    volumes:
+      - ./config/sonarr:/config
+      - ${LIBRARY}:/data
+    ports:
+      - 127.0.0.1:8989:8989
+    networks:
+      - internal_net
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      <<: *a1
+    volumes:
+      - ./config/bazarr:/config
+      - ${LIBRARY}:/data
+    ports:
+      - 127.0.0.1:6767:6767
+    networks:
+      - internal_net
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:8
+    container_name: recyclarr
+    restart: unless-stopped
+    environment:
+      <<: *a1
+    volumes:
+      - ./config/recyclarr:/config
+    networks:
+      - internal_net
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      <<: *a1
+    volumes:
+      - ./config/prowlarr:/config
+    ports:
+      - 127.0.0.1:9696:9696
+    networks:
+      - internal_net
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: byparr
+    restart: unless-stopped
+    init: true
+    environment:
+      LOG_LEVEL: info
+      TZ: ${TZ}
+    networks:
+      - internal_net
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    environment:
+      # - CAPTCHA_SOLVER=
+      - TZ=Asia/Kolkata
+    networks:
+      - internal_net
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    stop_grace_period: 30s
+    environment:
+      <<: *a1
+      WEBUI_PORT: 8090
+      TORRENTING_PORT: 6882
+    volumes:
+      - ./config/qbittorrent:/config
+      - ${LIBRARY}:/data
+    ports:
+      - 127.0.0.1:8090:8090
+      - 6882:6882
+      - 6882:6882/udp
+    networks:
+      - internal_net
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    container_name: cleanuparr
+    restart: unless-stopped
+    environment:
+      <<: *a1
+      UMASK: 22
+    volumes:
+      - ./config/cleanuparr:/config
+      - ${LIBRARY}:/data
+    ports:
+      - 127.0.0.1:11011:11011
+    networks:
+      - internal_net
+networks:
+  internal_net: {}
+  tsdproxy_default:
+    external: true
+
+volumes:
+  datadir: null
+
