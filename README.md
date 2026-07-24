@@ -1,4 +1,7 @@
+# Overview
 ![preview](.docs/dashboard-overview.png)
+
+TODO: talk about some 15+ services etc etc...
 
 # Hardware Specs
 | Components | Specifications |
@@ -41,6 +44,7 @@ sudo apt install openssh-server -y
 sudo systemctl enable --now ssh
 ```
 
+TODO: continue with
 - static ip
 - tailscale
 - docker
