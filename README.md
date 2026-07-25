@@ -1,8 +1,7 @@
 # Overview
 ![preview](.docs/dashboard-overview.png)
 
-This guide is a step-by-step walkthrough about turning your ancient PC (that just sits in a corner doing absolutely NOTHING) into your very own netflix, a cloud storage/NAS, image backup server, and many more with
-a touch of *love*.
+This guide is a step-by-step walkthrough about turning your old PC (that has been sitting in a corner doing absolutely *nothing*) into your very own netflix, a cloud storage/NAS, image backup server, and many more - with just a little *love*.
 
 # Hardware Specifications
 | Components | Specifications |
@@ -15,41 +14,40 @@ a touch of *love*.
 | *Storage | *Seagate BarraCuda 1TB HDD |
 
 > [!IMPORTANT]
-> It is recommended to swap out HDD for a SSD to install the OS into. You can use that HDD as a cold storage!
+> It is recommended to install the operating system on an SSD and use the HDD for cold storage.
 >
-> If you want hardware transcoding for Jellyin and Immich, you need a GPU either integrated or dedicated.
+> If you want hardware transcoding for Jellyfin and Immich, you'll need a GPU, either integrated or dedicated.
 
 # Prequisite
 - Internet Connection
 - Flashdrive. 8GB or more
-- Ubunter Server ISO
-- *That Old PC/Laptop*
-- Another PC/Laptop
+- Ubuntu Server ISO
+- Another PC or Laptop
 - (Optional but Recommended) Custom Domain
 
 > [!NOTE]
-> This guide uses reverse proxy (Caddy) to access apps since every accessible port is bind to localhost and can only be reached via custom domains.
+> This guide uses a reverse proxy (Caddy) because every application is bound to localhost and is only accessible through custom domains.
 >
-> You can do this without custom domains, more on that later.
+> You can also follow this guide without a custom domain — more on that later.
 
 # Setting up the Server
 - Download [Ubuntu Server](https://ubuntu.com/download/server) ISO
-- Flash the ISO into the flashdrive using your favourite tool. I personally like balenaEtcher.
-- Plug a monitor and a keyboard into the PC (you dont need to do this for a laptop).
-- Plug that flashdrive into your _old PC_ and boot from it by pressing the boot menu key. Depending on your motherboard your boot menu key may be different! For me its **F12**.
-- Install Ubuntu Server. Make sure to select "install **OpenSSH Server**".
+- Flash the ISO to a USB drive using your preferred tool. I personally recommend balenaEtcher.
+- Connect a monitor and keyboard to your PC (this isn't necessary if you're using a laptop).
+- Insert the USB drive into your old PC and boot from it by pressing your motherboard's boot menu key. The key varies depending on the manufacturer—for my motherboard, it's **F12**.
+- Install Ubuntu Server, make sure to select "install **OpenSSH Server**".
 
   ![openssh-server](.docs/openssh-server-overview.png)
-  OR
+  Or install it later
   ```
   sudo apt update
   sudo apt install openssh-server -y
   sudo systemctl enable --now ssh
   ```
-- After installation, Login into the server.
-- Give the server a static ip.
+- After the installation is complete, log in to the server.
+- Assign the server a static IP address.
   
-  Edit or make a file. For example, <kbd>/etc/netplan/static.yaml</kbd>
+  Edit (or create) a Netplan configuration file, for example: <kbd>/etc/netplan/static.yaml</kbd>
   ```
   network:
   version: 2
@@ -66,19 +64,20 @@ a touch of *love*.
   ```
   Then `sudo netplan apply`.
 
-- Install Tailscale and add the server into the tailnet
-
+- Install Tailscale and add the server to your tailnet.
   ```
   curl -fsSL https://tailscale.com | sh
   sudo tailscale up
   ```
 > [!NOTE]
-> If you are planning to use **Pihole**, then you must disable DNS override by tailscale by using `sudo tailscale set --accept-dns=false`
+> If you plan to use Pi-hole, disable Tailscale's DNS override by running:
+>
+> `sudo tailscale set --accept-dns=false`
 
-- After this point you can access your server remotely if you want to. Open the terminal in your other PC (you have to be in the same network either lan or tailnet) type `ssh <server-name>@192.168.x.x` or  `ssh <server-name>@100.x.x.x`. 
+- At this point, you can access your server remotely. Open a terminal on another computer that's connected to either your LAN or your tailnet and run: `ssh <username>@192.168.x.x` or `ssh <username>@100.x.x.x`
 
-- Install [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Also refer [here](https://docs.docker.com/engine/install/linux-postinstall/).
-- Make a directory where you would want to keep all your containers. Lets say `~/docker-containers` for example.
+- Install Docker by following the official [Docker installation guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Also refer [here](https://docs.docker.com/engine/install/linux-postinstall/).
+- Create a directory to store all your Docker containers. For example:
   
   ```
   ~/docker-containers
@@ -96,14 +95,16 @@ a touch of *love*.
     | ...
   
   ```
-- (Optional) Unattended Upgrades
-- (Optional but Recommended) Caddy. I use Caddy with porkbun module. [link](https://caddyserver.com/docs/modules/dns.providers.porkbun)
+- (*Optional*) Unattended Upgrades
+- (*Optional but Recommended*) Caddy. I use Caddy with Porkbun DNS module. [link](https://caddyserver.com/docs/modules/dns.providers.porkbun)
 
 > [!TIP]
-> If you do get a domain, make a wildcard subdomain pointing to the tailnet ip of the server. You can also have two seperate subdomains for tailnet and LAN. For example,<br>
+> If you own a domain, create a wildcard DNS record that points to your server's Tailscale IP.
 >
-> **foo.domain.tld** for **Tailnet**<br>
-> **foo.local.domain.tld** for **LAN**
+> You can also create separate subdomains for your tailnet and LAN. For example:
+>
+> **foo.domain.tld** → **Tailnet**<br>
+> **foo.local.domain.tld** → **LAN**
 
 # Applications
 
