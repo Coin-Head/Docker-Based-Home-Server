@@ -35,6 +35,7 @@ a touch of *love*.
 # Setting up the Server
 - Download [Ubuntu Server](https://ubuntu.com/download/server) ISO
 - Flash the ISO into the flashdrive using your favourite tool. I personally like balenaEtcher.
+- Plug a monitor and a keyboard into the PC (you dont need to do this for a laptop).
 - Plug that flashdrive into your _old PC_ and boot from it by pressing the boot menu key. Depending on your motherboard your boot menu key may be different! For me its **F12**.
 - Install Ubuntu Server. Make sure to select "install **OpenSSH Server**".
 
@@ -45,7 +46,8 @@ a touch of *love*.
   sudo apt install openssh-server -y
   sudo systemctl enable --now ssh
   ```
-- After installation, give the server a static ip.
+- After installation, Login into the server.
+- Give the server a static ip.
   
   Edit or make a file. For example, <kbd>/etc/netplan/static.yaml</kbd>
   ```
@@ -72,6 +74,8 @@ a touch of *love*.
   ```
 > [!NOTE]
 > If you are planning to use **Pihole**, then you must disable DNS override by tailscale by using `sudo tailscale set --accept-dns=false`
+
+- After this point you can access your server remotely if you want to. Open the terminal in your other PC (you have to be in the same network either lan or tailnet) type `ssh <server-name>@192.168.x.x` or  `ssh <server-name>@100.x.x.x`. 
 
 - Install [Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Also refer [here](https://docs.docker.com/engine/install/linux-postinstall/).
 - Make a directory where you would want to keep all your containers. Lets say `~/docker-containers` for example.
@@ -103,12 +107,23 @@ a touch of *love*.
 
 # Applications
 
-- Dockge
-- ntfy
-- Filebrowser
-TODO: add more to the list
+- [Dockge](#dockge)
+- [ntfy](#ntfy)
+- [vaultwarden](#vaultwarden)
+- [Filebrowser/NAS](#filebrowser/nas)
+- [Immich](#immich)
+- TSDProxy
+- Mediaserver
+- Changedetection.io
+- Beszel
+- Aria2 + AriaNg
+- Pihole
+- Stirling PDF
+- Uptime Kuma
+- Watchtower
+- Duplicati
+- Cockpit
+- Homarr
 
-TODO: make headings
 ### Dockge
-
-### ntfy
+- Goto to your desired directory and copy these [files](dockge/)
