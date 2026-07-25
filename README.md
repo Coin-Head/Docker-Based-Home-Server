@@ -1,22 +1,37 @@
 # Overview
+TODO: change to https://excalidraw.com/
 ![preview](.docs/dashboard-overview.png)
 
-This guide is a step-by-step walkthrough about turning your old PC (that has been sitting in a corner doing absolutely *nothing*) into your very own netflix, a cloud storage/NAS, image backup server, and many more - with just a little *love*.
+This guide is a step-by-step walkthrough about turning your old PC (that has been sitting in a corner doing absolutely *nothing*) into your very own Netflix, a cloud storage/NAS, image backup server, and many more - with a little *love*.
 
-# Hardware Specifications
+# Specifications
+Here's an overview of my server's hardware and software specifications.
+
+### Hardware Specs
 | Components | Specifications |
 | --- | --- |
 | Motherboard | Gigabyte H270-Gaming 3 |
 | CPU | Intel® Core™ i3-7100 Processor @ 3.90 GHz |
 | GPU/Integrated GPU | Intel® HD Graphics 630  |
 | Memory | 8GB DDR4 2400 Mhz |
-| Network | 150 Mbps ↓ / 170 Mbps ↑ |
+| Network | Ethernet 150 Mbps ↓ / 170 Mbps ↑ |
+| Power Supply | PSU (TODO: FILL) |
+| Power Protection | UPS (TODO: FILL) |
 | *Storage | *Seagate BarraCuda 1TB HDD |
 
 > [!IMPORTANT]
 > It is recommended to install the operating system on an SSD and use the HDD for cold storage.
 >
 > If you want hardware transcoding for Jellyfin and Immich, you'll need a GPU, either integrated or dedicated.
+
+### Software Stack
+| Components | Specifications |
+| --- | --- |
+| Operating System | Ubuntu Server LTS |
+| Filesystem | ext4 |
+| Remote Access | OpenSSH Server, Tailscale |
+| Essentials | Docker & Docker Compose |
+| Reverse Proxy | Caddy |
 
 # Prequisite
 - Internet Connection
@@ -35,7 +50,7 @@ This guide is a step-by-step walkthrough about turning your old PC (that has bee
 - Flash the ISO to a USB drive using your preferred tool. I personally recommend balenaEtcher.
 - Connect a monitor and keyboard to your PC (this isn't necessary if you're using a laptop).
 - Insert the USB drive into your old PC and boot from it by pressing your motherboard's boot menu key. The key varies depending on the manufacturer—for my motherboard, it's **F12**.
-- Install Ubuntu Server, make sure to select "install **OpenSSH Server**".
+- Install Ubuntu Server, make sure to select "**Install OpenSSH Server**".
 
   ![openssh-server](.docs/openssh-server-overview.png)
   Or install it later
@@ -110,15 +125,15 @@ This guide is a step-by-step walkthrough about turning your old PC (that has bee
 
 - [Dockge](#dockge)
 - [ntfy](#ntfy)
-- [vaultwarden](#vaultwarden)
-- [Filebrowser/NAS](#filebrowser/nas)
+- [Vaultwarden](#vaultwarden)
+- [File Browser or NAS](#file-browser-or-nas)
 - [Immich](#immich)
 - TSDProxy
 - Mediaserver
 - Changedetection.io
 - Beszel
 - Aria2 + AriaNg
-- Pihole
+- Pi-hole
 - Stirling PDF
 - Uptime Kuma
 - Watchtower
