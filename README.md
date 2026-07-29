@@ -1,6 +1,5 @@
 # Overview
-TODO: change to https://excalidraw.com/
-![preview](.docs/dashboard-overview.png)
+![overview](.docs/server-overview.png)
 
 This guide is a step-by-step walkthrough about turning your old PC (that has been sitting in a corner doing absolutely *nothing*) into your very own Netflix, a cloud storage/NAS, image backup server, and many more - with a little *love*.
 
@@ -15,8 +14,8 @@ Here's an overview of my server's hardware and software specifications.
 | GPU/Integrated GPU | Intel® HD Graphics 630  |
 | Memory | 8GB DDR4 2400 Mhz |
 | Network | Ethernet 150 Mbps ↓ / 170 Mbps ↑ |
-| Power Supply | PSU (TODO: FILL) |
-| Power Protection | UPS (TODO: FILL) |
+| Power Supply | 300–450 W ATX PSU 80 Plus Bronze |
+| Power Protection | 650 VA Line-Interactive UPS |
 | *Storage | *Seagate BarraCuda 1TB HDD |
 
 > [!IMPORTANT]
@@ -89,7 +88,16 @@ Here's an overview of my server's hardware and software specifications.
 >
 > `sudo tailscale set --accept-dns=false`
 
-- At this point, you can access your server remotely. Open a terminal on another computer that's connected to either your LAN or your tailnet and run: `ssh <username>@192.168.x.x` or `ssh <username>@100.x.x.x`
+- If you are using a laptop as your server. Edit `/etc/systemd/logind.conf` to modify these:
+
+  ```
+  HandleLidSwitch=ignore
+  HandleLidSwitchExternalPower=ignore
+  HandleLidSwitchDocked=ignore
+  LidSwitchedIgnoreInhibited=no
+  ```
+  After editing, reboot the server using `sudo reboot`. Now your server with your lid closed.
+- At this point, you can access your server remotely. Open a terminal on another computer that's connected to either your LAN or your tailnet and run: `ssh <username>@<server_ip>`.
 
 - Install Docker by following the official [Docker installation guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository). Also refer [here](https://docs.docker.com/engine/install/linux-postinstall/).
 - Create a directory to store all your Docker containers. For example:
@@ -121,25 +129,27 @@ Here's an overview of my server's hardware and software specifications.
 > **foo.domain.tld** → **Tailnet**<br>
 > **foo.local.domain.tld** → **LAN**
 
-# Applications
+# Services
+The following guides walk you through setting up each service.
 
-- [Dockge](#dockge)
-- [ntfy](#ntfy)
-- [Vaultwarden](#vaultwarden)
-- [File Browser or NAS](#file-browser-or-nas)
-- [Immich](#immich)
-- TSDProxy
-- Mediaserver
-- Changedetection.io
-- Beszel
-- Aria2 + AriaNg
-- Pi-hole
-- Stirling PDF
-- Uptime Kuma
-- Watchtower
-- Duplicati
-- Cockpit
-- Homarr
+- [Dockge](dockge/setup.md)
+- [ntfy](ntfy/setup.md)
+- [Vaultwarden](vaultwarden/setup.md)
+- [File Browser or NAS](filebrowser/setup.md)
+- [Immich](immich/setup.md)
+- [TSDProxy](tsdproxy/setup.md)
+- [Mediaserver](mediaserver/setup.md)
+- [Changedetection.io](changedetection/setup.md)
+- [Beszel](beszel/setup.md)
+- [Aria2 + AriaNg](aria2/setup.md)
+- [Pi-hole](pi-hole/setup.md)
+- [Stirling PDF](stirling-pdf/setup.md)
+- [Uptime Kuma](uptime_kuma/setup.md)
+- [Watchtower](watchtower/setup.md)
+- [Duplicati](duplicati/setup.md)
+- [Cockpit](cockpit/setup.md)
+- [Homarr](homarr/setup.md)
 
-### Dockge
-- Goto to your desired directory and copy these [files](dockge/)
+TODO: Extras
+# Extras
+- Setting up Caddy
