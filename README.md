@@ -150,6 +150,8 @@ The following guides walk you through setting up each service.
 - [Cockpit](cockpit/setup.md)
 - [Homarr](homarr/setup.md)
 
-TODO: Extras
+# Update & Maintenance
+TODO: write
+
 # Extras
-- Setting up Caddy
+TODO: write
