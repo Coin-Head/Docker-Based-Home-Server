@@ -1,7 +1,7 @@
 # ntfy
 
 - Navigate to the directory where you store all your Docker containers. For example, `~/docker-containers`.
-- Create a new directory named `dockge`. Inside it, create two files named `compose.yaml` and `.env`.
+- Create a new directory named `ntfy`. Inside it, create two files named `compose.yaml` and `.env`.
 
   ```text
   ~/docker-containers
