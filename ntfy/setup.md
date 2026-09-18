@@ -6,7 +6,7 @@
   ```text
   ~/docker-containers
     |
-    └── dockge
+    └── ntfy
         ├── compose.yaml
         └── .env
   ```
